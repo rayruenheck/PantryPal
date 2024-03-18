@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import IngredientCard from '../components/ingredientcard';
 import { aisleDict } from '../components/aisleDict';
+import Link from 'next/link';
 
 export default function Page() {
   const apiKey = process.env.NEXT_PUBLIC_SECRET_API_KEY;
@@ -28,7 +29,8 @@ export default function Page() {
     .catch(error => {
         console.error('Error fetching data: ', error);
     });
-}, [ingredient, apiKey]);
+  }, [ingredient, apiKey]);
+  
 
 
   const fetchPantryItems = useCallback(async () => {
@@ -130,18 +132,33 @@ export default function Page() {
 
   
 
-
   return (
     <div className='h-screen w-full overflow-y-auto bg-white px-8 py-10'>
       {userToken && <button className="absolute top-4 right-4 bg-blue-500 text-white py-1 px-4 rounded-full" onClick={handleLogout}>Logout</button>}
       <h1 className="text-4xl font-bold mb-8 text-center">Add ingredients to your pantry</h1>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Add ingredients</h2>
-        <h2 className="text-xl font-semibold text-blue-500">In your pantry</h2>
+        <h2 className="text-xl font-semibold text-blue-500 cursor-pointer">In your pantry</h2>
       </div>
-      <div className='mb-8'>
-        {Object.keys(aisleDict).map((aisle) => (
-          <div key={aisle} className="mb-8">
+      {/* Include the search bar here */}
+      <div className="search-box flex items-center border-2 rounded-lg border-gray-500 mb-8 bg-white">
+        <input
+          value={ingredient}
+          onChange={(e) => setIngredient(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              // Add logic to handle the search operation here
+            }
+          }}
+          className='flex-1 py-2 px-4 rounded-lg bg-transparent placeholder-gray-500 focus:outline-none'
+          type='text'
+          placeholder='Search for ingredients'
+        />
+      </div>
+      {/* IngredientCard Components Below */}
+      {Object.keys(aisleDict).map((aisle) => (
+        <div key={aisle} className="mb-8">
           <button
             className="w-full text-left text-x1 font-medium bg-white py-3 px-6 rounded-lg flex justify-between items-center"
             onClick={() => setOpenDropdown(openDropdown === aisle ? null : aisle)}
@@ -149,22 +166,21 @@ export default function Page() {
             {aisle}
             <img 
               src="/dropdown.png" 
-              alt="toggle" 
+              alt="Dropdown icon" 
               className="w-6 h-6" // Adjust width and height here
             />
           </button>
-            {openDropdown === aisle && (
-              <div className="mt-4 bg-white py-4 px-6 rounded-lg shadow">
-                <IngredientCard
-                  ingredientList={aisleDict[aisle]}
-                  updateIngredientsList={handleIngredientsListUpdate}
-                  checkCondition={(ingredient) => ingredientsList.some(item => item.id === ingredient.id)}
-                />
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+          {openDropdown === aisle && (
+            <div className="mt-4 bg-white py-4 px-6 rounded-lg shadow">
+              <IngredientCard
+                ingredientList={aisleDict[aisle]}
+                updateIngredientsList={handleIngredientsListUpdate}
+                checkCondition={(ingredient) => ingredientsList.some(item => item.id === ingredient.id)}
+              />
+            </div>
+          )}
+        </div>
+      ))}
       <div className="fixed bottom-0 left-0 right-0 py-4 bg-white shadow-md">
         <div className='w-full flex justify-around items-center'>
           <a className="text-gray-700 font-medium" href="#">Pantry</a>
