@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import IngredientCard from '../components/ingredientcard';
 import { aisleDict } from '../components/aisleDict';
+import Link from 'next/link';
 
 export default function Page() {
   const apiKey = process.env.NEXT_PUBLIC_SECRET_API_KEY;
@@ -12,7 +13,6 @@ export default function Page() {
   const [ingredientsList, setIngredientsList] = useState([]);;
   const [userToken, setUserToken] = useState('')
   const [userPantryClicked, setUserPantryClicked] = useState(false)
-
   useEffect(() => {
     fetch(`https://api.spoonacular.com/food/ingredients/search?query=${ingredient}`, {
         method: 'GET',
@@ -126,16 +126,62 @@ export default function Page() {
 
     alert('You have been logged out successfully')
   };
-  
-
-  
 
 
-  return (
-    <div className='h-screen w-full'>
-      {userToken && <button onClick={handleLogout}>Logout</button>}
-      <h1 className="text-4xl font-bold mb-4 text-center pt-10">Suggested Recipes</h1>
-      <div className="search-container mx-auto max-w-3xl p-5">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    return (
+      <div className='h-screen w-full overflow-y-auto bg-white px-8 py-10'>
+        {userToken && <button className="absolute top-4 right-4 bg-blue-500 text-white py-1 px-4 rounded-full" onClick={handleLogout}>Logout</button>}
+        <h1 className="text-4xl font-bold mb-8 text-center">Add ingredients to your pantry</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h2 onClick={() => setUserPantryClicked(false)} className="text-xl font-semibold">Add ingredients</h2>
+          <h2 onClick={() => { fetchPantryItems(); setUserPantryClicked(true); }} className="text-xl font-semibold text-blue-500 cursor-pointer">In your pantry</h2>
+        </div>
         <div className="search-box flex items-center border-2 rounded-lg border-gray-500 mb-8 bg-white">
           <input
             value={ingredient}
@@ -143,55 +189,62 @@ export default function Page() {
             onKeyPress={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                setIngredientsList(prev => [...prev, { id: Date.now().toString(), name: ingredient }]); // Example to convert string to object
-                setIngredient('');
+                // TODO: Implement search functionality
               }
             }}
             className='flex-1 py-2 px-4 rounded-lg bg-transparent placeholder-gray-500 focus:outline-none'
             type='text'
             placeholder='Search for ingredients'
           />
-        </div>      
-      </div>
-      <IngredientCard
+        </div>
+        <IngredientCard
             ingredientList={data}
             updateIngredientsList={handleIngredientsListUpdate}
             checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id)  : ingredientsList.some(item => item.id === ingredient.id)}
           />
-      <div>
-      <div className='w-full flex justify-center items-center'>
-        <p onClick={() => setUserPantryClicked(false)}>Suggested Ingredients</p>
-        <p className='ml-6' onClick={() => { fetchPantryItems(); setUserPantryClicked(true); }}>Your Pantry</p>
-      </div>
-        {userPantryClicked ? (
+            {userPantryClicked ? (
           <IngredientCard
             ingredientList={userToken ? pantryItems : ingredientsList}
             updateIngredientsList={handleIngredientsListUpdate}
             checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id) : ingredientsList.some(item => item.id === ingredient.id)}
           />
         ) : (
-          Object.keys(aisleDict).map((aisle) => (
-            <div key={aisle} className="mb-4">
-              <button
-                className="py-2 px-4 w-full text-left rounded-lg bg-gray-200 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                onClick={() => setOpenDropdown(openDropdown === aisle ? null : aisle)}
-              >
-                {aisle}
-              </button>
-              {openDropdown === aisle && (
-                <div className="mt-2 space-y-2">
-                  <IngredientCard
-                    ingredientList={aisleDict[aisle]}
-                    updateIngredientsList={handleIngredientsListUpdate}
-                    checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id) : ingredientsList.some(item => item.id === ingredient.id)}
-                  />
-                </div>
-              )}
-            </div>
-          ))
-        )}
+        Object.keys(aisleDict).map((aisle) => (
+          <div key={aisle} className="mb-8">
+            <button
+              className="w-full text-left text-xl font-medium bg-white py-3 px-6 rounded-lg flex justify-between items-center"
+              onClick={() => setOpenDropdown(openDropdown === aisle ? null : aisle)}
+            >
+              {aisle}
+              <img 
+                src="/dropdown.png" 
+                alt="Dropdown icon" 
+                className="w-6 h-6" 
+              />
+            </button>
+            {openDropdown === aisle && (
+              <div className="mt-4 bg-white py-4 px-6 rounded-lg shadow">
+                <IngredientCard
+                  ingredientList={aisleDict[aisle]}
+                  updateIngredientsList={handleIngredientsListUpdate}
+                  checkCondition={(ingredient) => ingredientsList.some(item => item.id === ingredient.id)}
+                />
+              </div>
+            )}
+          </div>
+        )))}
+        <div className="fixed bottom-16 left-0 right-0 px-8">
+          <button className="w-full bg-green-500 text-tan-500 py-3 px-6 rounded-lg text-xl font-bold">
+            Get Recipes
+          </button>
+        </div>
+        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md">
+          <div className='w-full flex justify-around items-center py-4'>
+            <Link href="/pantry" legacyBehavior><a className="text-gray-700 font-medium">Pantry</a></Link>
+            <Link href="/recipes" legacyBehavior><a className="text-gray-700 font-medium">Recipes</a></Link>
+            <Link href="/account" legacyBehavior><a className="text-gray-700 font-medium">Account</a></Link>
+          </div>
+        </div>
       </div>
-      <a href="/searchrecipe">search</a>
-    </div>
-  );
-}
+    );
+  }
