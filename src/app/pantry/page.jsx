@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import IngredientCard from '../components/ingredientcard';
 import { aisleDict } from '../components/aisleDict';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Page() {
   const apiKey = process.env.NEXT_PUBLIC_SECRET_API_KEY;
@@ -127,54 +128,7 @@ export default function Page() {
     alert('You have been logged out successfully')
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    return (
+  return (
       <div className='h-screen w-full overflow-y-auto bg-white px-8 py-10'>
         {userToken && <button className="absolute top-4 right-4 bg-blue-500 text-white py-1 px-4 rounded-full" onClick={handleLogout}>Logout</button>}
         <h1 className="text-4xl font-bold mb-8 text-center">Add ingredients to your pantry</h1>
@@ -216,7 +170,10 @@ export default function Page() {
               onClick={() => setOpenDropdown(openDropdown === aisle ? null : aisle)}
             >
               {aisle}
-              <img 
+              <Image
+              width={10}
+              height={10}
+              
                 src="/dropdown.png" 
                 alt="Dropdown icon" 
                 className="w-6 h-6" 
@@ -234,7 +191,7 @@ export default function Page() {
           </div>
         )))}
         <div className="fixed bottom-16 left-0 right-0 px-8">
-          <button className="w-full bg-green-500 text-tan-500 py-3 px-6 rounded-lg text-xl font-bold">
+          <button href='/recipes' className="w-full bg-green-500 text-tan-500 py-3 px-6 rounded-lg text-xl font-bold">
             Get Recipes
           </button>
         </div>
