@@ -133,14 +133,13 @@ export default function Page() {
   
 
   return (
-    <div className='h-screen w-full overflow-y-auto bg-white px-8 py-10'>
+    <div className='h-screen w-full overflow-y-auto bg-white px-8 pt-10 pb-24'> {/* Add padding-bottom to prevent content from being obscured by the fixed container */}
       {userToken && <button className="absolute top-4 right-4 bg-blue-500 text-white py-1 px-4 rounded-full" onClick={handleLogout}>Logout</button>}
       <h1 className="text-4xl font-bold mb-8 text-center">Add ingredients to your pantry</h1>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Add ingredients</h2>
-        <h2 className="text-xl font-semibold text-blue-500 cursor-pointer">In your pantry</h2>
+        <Link href="/your-pantry" passHref><h2 className="text-xl font-semibold text-blue-500 cursor-pointer">In your pantry</h2></Link>
       </div>
-      {/* Include the search bar here */}
       <div className="search-box flex items-center border-2 rounded-lg border-gray-500 mb-8 bg-white">
         <input
           value={ingredient}
@@ -148,7 +147,7 @@ export default function Page() {
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              // Add logic to handle the search operation here
+              // TODO: Implement search functionality
             }
           }}
           className='flex-1 py-2 px-4 rounded-lg bg-transparent placeholder-gray-500 focus:outline-none'
@@ -156,18 +155,17 @@ export default function Page() {
           placeholder='Search for ingredients'
         />
       </div>
-      {/* IngredientCard Components Below */}
       {Object.keys(aisleDict).map((aisle) => (
         <div key={aisle} className="mb-8">
           <button
-            className="w-full text-left text-x1 font-medium bg-white py-3 px-6 rounded-lg flex justify-between items-center"
+            className="w-full text-left text-xl font-medium bg-white py-3 px-6 rounded-lg flex justify-between items-center"
             onClick={() => setOpenDropdown(openDropdown === aisle ? null : aisle)}
           >
             {aisle}
             <img 
               src="/dropdown.png" 
               alt="Dropdown icon" 
-              className="w-6 h-6" // Adjust width and height here
+              className="w-6 h-6" 
             />
           </button>
           {openDropdown === aisle && (
@@ -181,13 +179,20 @@ export default function Page() {
           )}
         </div>
       ))}
-      <div className="fixed bottom-0 left-0 right-0 py-4 bg-white shadow-md">
-        <div className='w-full flex justify-around items-center'>
-          <a className="text-gray-700 font-medium" href="#">Pantry</a>
-          <a className="text-gray-700 font-medium" href="#">Recipes</a>
-          <a className="text-gray-700 font-medium" href="#">Account</a>
-        </div>
+        {/* Get Recipes Button - Fixed Position */}
+    <div className="fixed bottom-16 left-0 right-0 px-8"> {/* Adjust bottom value based on your navigation height */}
+      <button className="w-full bg-green-500 text-tan-500 py-3 px-6 rounded-lg text-xl font-bold">
+        Get Recipes
+      </button>
+    </div>
+    {/* Fixed Position Bottom Navigation */}
+    <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md">
+      <div className='w-full flex justify-around items-center py-4'>
+        <a className="text-gray-700 font-medium" href="/pantry">Pantry</a>
+        <a className="text-gray-700 font-medium" href="/recipes">Recipes</a>
+        <a className="text-gray-700 font-medium" href="/account">Account</a>
       </div>
     </div>
-  );
-}
+  </div>
+);
+          }
