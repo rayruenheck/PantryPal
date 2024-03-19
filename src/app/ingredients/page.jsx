@@ -174,41 +174,59 @@ export default function Page() {
 
 
 
-    return (
-      <div className='h-screen w-full overflow-y-auto bg-white px-8 py-10'>
-        {userToken && <button className="absolute top-4 right-4 bg-blue-500 text-white py-1 px-4 rounded-full" onClick={handleLogout}>Logout</button>}
-        <h1 className="text-4xl font-bold mb-8 text-center">Add ingredients to your pantry</h1>
-        <div className="flex items-center justify-between mb-8">
-          <h2 onClick={() => setUserPantryClicked(false)} className="text-xl font-semibold">Add ingredients</h2>
-          <h2 onClick={() => { fetchPantryItems(); setUserPantryClicked(true); }} className="text-xl font-semibold text-blue-500 cursor-pointer">In your pantry</h2>
-        </div>
-        <div className="search-box flex items-center border-2 rounded-lg border-gray-500 mb-8 bg-white">
-          <input
-            value={ingredient}
-            onChange={(e) => setIngredient(e.target.value)}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                // TODO: Implement search functionality
-              }
-            }}
-            className='flex-1 py-2 px-4 rounded-lg bg-transparent placeholder-gray-500 focus:outline-none'
-            type='text'
-            placeholder='Search for ingredients'
-          />
-        </div>
+  return (
+    <div className='h-screen w-full overflow-y-auto bg-white px-8 py-10'>
+      {userToken && (
+        <button
+          className="absolute top-4 right-4 bg-blue-500 text-white py-1 px-4 rounded-full"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      )}
+      <h1 className="text-4xl font-bold mb-8 text-center">Add ingredients to your pantry</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h2
+          onClick={() => setUserPantryClicked(false)}
+          className={`text-xl font-semibold cursor-pointer ${!userPantryClicked ? 'text-green-500 border-b-2 border-green-500 pb-1' : ''}`}
+        >
+          Add ingredients
+        </h2>
+        <h2
+          onClick={() => { fetchPantryItems(); setUserPantryClicked(true); }}
+          className={`text-xl font-semibold cursor-pointer ${userPantryClicked ? 'text-green-500 border-b-2 border-green-500 pb-1' : ''}`}
+      
+        >
+          In your pantry
+        </h2>
+      </div>
+      <div className="search-box flex items-center border-2 rounded-lg border-gray-500 mb-8 bg-white">
+        <input
+          value={ingredient}
+          onChange={(e) => setIngredient(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              // Implement search functionality here
+            }
+          }}
+          className='flex-1 py-2 px-4 rounded-lg bg-transparent placeholder-gray-500 focus:outline-none'
+          type='text'
+          placeholder='Search for ingredients'
+        />
+      </div>
+      <IngredientCard
+        ingredientList={data}
+        updateIngredientsList={handleIngredientsListUpdate}
+        checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id) : ingredientsList.some(item => item.id === ingredient.id)}
+      />
+      {userPantryClicked ? (
         <IngredientCard
-            ingredientList={data}
-            updateIngredientsList={handleIngredientsListUpdate}
-            checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id)  : ingredientsList.some(item => item.id === ingredient.id)}
-          />
-            {userPantryClicked ? (
-          <IngredientCard
-            ingredientList={userToken ? pantryItems : ingredientsList}
-            updateIngredientsList={handleIngredientsListUpdate}
-            checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id) : ingredientsList.some(item => item.id === ingredient.id)}
-          />
-        ) : (
+          ingredientList={userToken ? pantryItems : ingredientsList}
+          updateIngredientsList={handleIngredientsListUpdate}
+          checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id) : ingredientsList.some(item => item.id === ingredient.id)}
+        />
+      ) : (
         Object.keys(aisleDict).map((aisle) => (
           <div key={aisle} className="mb-8">
             <button
@@ -232,19 +250,20 @@ export default function Page() {
               </div>
             )}
           </div>
-        )))}
-        <div className="fixed bottom-16 left-0 right-0 px-8">
-          <button className="w-full bg-green-500 text-tan-500 py-3 px-6 rounded-lg text-xl font-bold">
-            Get Recipes
-          </button>
-        </div>
-        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md">
-          <div className='w-full flex justify-around items-center py-4'>
-            <Link href="/pantry" legacyBehavior><a className="text-gray-700 font-medium">Pantry</a></Link>
-            <Link href="/recipes" legacyBehavior><a className="text-gray-700 font-medium">Recipes</a></Link>
-            <Link href="/account" legacyBehavior><a className="text-gray-700 font-medium">Account</a></Link>
-          </div>
+        ))
+      )}
+      <div className="fixed bottom-16 left-0 right-0 px-8">
+        <button className="w-full bg-green-500 text-tan-500 py-3 px-6 rounded-lg text-xl font-bold">
+          Get Recipes
+        </button>
+      </div>
+      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md">
+        <div className='w-full flex justify-around items-center py-4'>
+          <Link href="/pantry" legacyBehavior><a className="text-gray-700 font-medium">Pantry</a></Link>
+          <Link href="/recipes" legacyBehavior><a className="text-gray-700 font-medium">Recipes</a></Link>
+          <Link href="/account" legacyBehavior><a className="text-gray-700 font-medium">Account</a></Link>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+ }  
