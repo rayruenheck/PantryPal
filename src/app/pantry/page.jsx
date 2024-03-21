@@ -133,7 +133,7 @@ export default function Page() {
         {userToken && <button className="absolute top-4 right-4 bg-blue-500 text-white py-1 px-4 rounded-full" onClick={handleLogout}>Logout</button>}
         <h1 className="text-4xl font-bold mb-8 text-center">Add ingredients to your pantry</h1>
         <div className="flex items-center justify-between mb-8">
-          <h2 onClick={() => setUserPantryClicked(false)} className="text-xl font-semibold">Add ingredients</h2>
+          <h2 onClick={() => {setUserPantryClicked(false); }} className="text-xl font-semibold">Add ingredients</h2>
           <h2 onClick={() => { fetchPantryItems(); setUserPantryClicked(true); }} className="text-xl font-semibold text-blue-500 cursor-pointer">In your pantry</h2>
         </div>
         <div className="search-box flex items-center border-2 rounded-lg border-gray-500 mb-8 bg-white">
@@ -151,11 +151,12 @@ export default function Page() {
             placeholder='Search for ingredients'
           />
         </div>
+        {userPantryClicked ? null :
         <IngredientCard
             ingredientList={data}
             updateIngredientsList={handleIngredientsListUpdate}
             checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id)  : ingredientsList.some(item => item.id === ingredient.id)}
-          />
+          />}
             {userPantryClicked ? (
           <IngredientCard
             ingredientList={userToken ? pantryItems : ingredientsList}

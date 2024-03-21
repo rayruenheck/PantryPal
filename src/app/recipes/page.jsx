@@ -69,7 +69,7 @@ export default function Page() {
   
     useEffect(() => {
       if (ingredientsList.length > 0) {
-        fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsListToString(ingredientsList)}&number=10&apiKey=${apiKey}`)
+        fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsListToString(ingredientsList)}&ranking=1&number=10&apiKey=${apiKey}`)
         .then(response => response.json())
         .then(data => {
           const tempRecipesDetails = data.map(item => ({
