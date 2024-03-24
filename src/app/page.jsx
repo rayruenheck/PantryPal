@@ -10,6 +10,7 @@ export default function Home() {
     <div>
       <a href="/pantry">pantry<br/></a>
       <a href="/recipes">recipes<br/></a>
+
       <a href="/login">login<br/></a>
       <a href="/register">register<br/></a>
       
