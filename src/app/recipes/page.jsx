@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import RecipeCard from '../components/recipecard'
+import Link from 'next/link';
 
 
 export default function Page() {
@@ -68,7 +69,7 @@ export default function Page() {
   
     useEffect(() => {
       if (ingredientsList.length > 0) {
-        fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsListToString(ingredientsList)}&number=100&apiKey=${apiKey}`)
+        fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsListToString(ingredientsList)}&ranking=1&number=10&apiKey=${apiKey}`)
         .then(response => response.json())
         .then(data => {
           const tempRecipesDetails = data.map(item => ({
@@ -86,7 +87,7 @@ export default function Page() {
     useEffect(() => {
       if (recipesDetails.length > 0) {
         const ids = recipesDetails.map(detail => detail.id).join(',');
-        fetch(`https://api.spoonacular.com/recipes/informationBulk?ids=${ids}&number=100&apiKey=${apiKey}`)
+        fetch(`https://api.spoonacular.com/recipes/informationBulk?ids=${ids}&number=10&apiKey=${apiKey}`)
         .then(response => response.json())
         .then(data => {
           const tempRecipeArray = data.map(item => {
@@ -156,6 +157,13 @@ export default function Page() {
               </div>
             ))}
           </div>
+          <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md">
+          <div className='w-full flex justify-around items-center py-4'>
+            <Link href="/pantry" legacyBehavior><a className="text-gray-700 font-medium">Pantry</a></Link>
+            <Link href="/recipes" legacyBehavior><a className="text-gray-700 font-medium">Recipes</a></Link>
+            <Link href="/account" legacyBehavior><a className="text-gray-700 font-medium">Account</a></Link>
+          </div>
+        </div>
         </div>
       );
   
