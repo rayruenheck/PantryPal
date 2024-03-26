@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function Page() {
     const apiKey = process.env.NEXT_PUBLIC_SECRET_API_KEY
-    const [selectedTime, setSelectedTime] = useState('')
+    const [selectedTime, setSelectedTime] = useState(200)
     const [recipe, setRecipe] = useState([])
     const [pantryItems, setPantryItems] = useState([])
     const [ingredientsList, setIngredientsList] = useState([]);
@@ -59,63 +59,48 @@ export default function Page() {
         setIngredientsList(pantryItems.map(item => item.name)); 
       } else {
         
-        setIngredientsList(currentList.map(item=>item.name));
+        setIngredientsList(currentList.map(item=> item.name));
       }
     }, [userToken, pantryItems])
 
     const ingredientsListToString = (ingredientsList) => {
+      
       return ingredientsList.join(', ');
     };
   
     useEffect(() => {
       if (ingredientsList.length > 0) {
-        fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsListToString(ingredientsList)}&ranking=1&number=10&apiKey=${apiKey}`)
+        fetch(`https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredientsListToString(ingredientsList)}&addRecipeInformation=true&fillIngredients=true&maxReadyTime=${selectedTime}&sort=min-missing-ingredients&apiKey=${apiKey}`)
         .then(response => response.json())
         .then(data => {
-          const tempRecipesDetails = data.map(item => ({
-            id: item.id,
-            missedIngredientsCount: item.missedIngredientCount
-          }));
-          setRecipesDetails(tempRecipesDetails);
-        })
-        .catch(error => {
-          console.error('Error fetching data: ', error);
-        });
-      }
-    }, [ingredientsList, apiKey]);
-  
-    useEffect(() => {
-      if (recipesDetails.length > 0) {
-        const ids = recipesDetails.map(detail => detail.id).join(',');
-        fetch(`https://api.spoonacular.com/recipes/informationBulk?ids=${ids}&number=10&apiKey=${apiKey}`)
-        .then(response => response.json())
-        .then(data => {
-          const tempRecipeArray = data.map(item => {
-            const details = recipesDetails.find(detail => detail.id === item.id) || {};
+          const tempRecipeArray = data.results.map(item => {
             return {
               id: item.id,
               title: item.title,
               link: item.sourceUrl,
               image: item.image,
               time: item.readyInMinutes,
-              missingIngredients: details.missedIngredientsCount
+              missedIngredientCount: item.missedIngredientCount,
+              missingIngredients: item.missedIngredients,
+              usedIngredients: item.usedIngredients,
             };
           });
+          console.log(tempRecipeArray)
           setRecipeArray(tempRecipeArray);
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
         });
       }
-    }, [recipesDetails, apiKey]);
+    }, [ingredientsList, apiKey, selectedTime]);
+  
     const handleTimeFilter = (time) => {
       setSelectedTime(time);
     };
-    const filteredRecipes = selectedTime ? recipeArray.filter(recipe => recipe.time <= selectedTime) : recipeArray;
+   
 
 
     
-
   
     return (
       <div className='h-screen w-full bg-gray-100'>
@@ -135,9 +120,9 @@ export default function Page() {
           <div className="time-filters mx-auto max-w-3xl p-5 flex justify-around mb-4">
           {[9, 29, 59].map((time) => (
             <button
+              onClick={()=>{handleTimeFilter(time)}}
               key={time}
               className={`py-2 px-4 rounded-lg ${selectedTime === time ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-              // onClick={() => handleTimeFilter(time)}
             >
               {time === 9 && '< 10 Minutes'}
               {time === 29 && '< 30 Minutes'}
@@ -153,7 +138,7 @@ export default function Page() {
                 className='w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-2 sm:p-4 hover:shadow-lg transition duration-300 rounded-md' // Add rounded-md class for rounded corners
                 style={{ marginBottom: '20px' }} // Add margin bottom for spacing
               >
-                <RecipeCard name={recipe.title}  image={recipe.image}  link={recipe.link}  time={recipe.time}  missingIngredients={recipe.missingIngredients} id={recipe.id} />
+                <RecipeCard name={recipe.title}  image={recipe.image}  link={recipe.link}  time={recipe.time}  missingIngredients={recipe.missingIngredients} missedIngredientCount={recipe.missedIngredientCount} id={recipe.id} />
               </div>
             ))}
           </div>

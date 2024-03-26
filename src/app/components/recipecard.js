@@ -2,20 +2,23 @@ import Image from 'next/image'
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function RecipeCard({name , image , link , time , missingIngredients, id }) {
+export default function RecipeCard({name , image , link , time , missingIngredients, id, missedIngredientCount }) {
 
     const router = useRouter()
+    
+    
 
     const toSlug = () => {
-        console.log(id)
+        console.log(missingIngredients)
+        localStorage.setItem('missingIngredients', JSON.stringify(missingIngredients))
         router.push(`/${name}/${id}`)
       }
 
     const handleMissingIngredients = () => {
-        if(missingIngredients == 0){
+        if(missedIngredientCount == 0){
             return 'you have all the ingredients'
         }else{
-            return `you need ${missingIngredients} more ingredients`
+            return `you need ${missedIngredientCount} more ingredients`
         }
     }
     const handleTime = () => {

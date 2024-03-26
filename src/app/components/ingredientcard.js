@@ -1,11 +1,26 @@
 
 import './IngredientCard.css';
 
-export default function IngredientCard({ ingredientList , updateIngredientsList, checkCondition }) {
+export default function IngredientCard({ ingredientList , updateIngredientsList, checkCondition, missedIngredients }) {
     
-    const handleIngredientClick = (ingredient) => {
-        updateIngredientsList(ingredient);
-      } 
+  const handleIngredientClick = (ingredient) => {
+    const isChecked = checkCondition(ingredient);
+    if (missedIngredients) {
+      if (missedIngredients.includes(ingredient.name)){
+        updateIngredientsList({
+            ...ingredient,
+            checked: false
+        });
+      }
+    } else {
+        
+        updateIngredientsList({
+            ...ingredient,
+            checked: !isChecked
+        });
+    }
+} 
+      
       
     
     return (

@@ -23,7 +23,7 @@ export default function Page() {
     })
     .then(response => response.json())
     .then(data => {
-        const ingredientsArray = data.results.map(result => ({ id: `${result.id}`, name: result.name }))
+        const ingredientsArray = data.results.map(result => ({ 'id': result.id, 'name': result.name }))
         setData(ingredientsArray || []);            
     })
     .catch(error => {
