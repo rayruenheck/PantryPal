@@ -84,15 +84,6 @@ export default function Page() {
           placeholder='Password'
           required
         />
-        <input
-          value={password} // Make sure to change this to confirmPassword and its corresponding state if you have one
-          onChange={(e) => setPassword(e.target.value)}
-          className='w-full border-2 border-gray-300 p-4 rounded-md'
-          type='password'
-          name='confirmPassword'
-          placeholder='Confirm Password'
-          required
-        />
           <button className='w-full bg-green-500 text-white p-4 rounded-md text-lg'>
             Create account
           </button>

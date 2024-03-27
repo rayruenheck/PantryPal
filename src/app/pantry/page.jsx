@@ -11,7 +11,14 @@ export default function Page() {
   const [openDropdown, setOpenDropdown] = useState(null);;
   const [pantryItems, setPantryItems] = useState([]);
   const [ingredient, setIngredient] = useState('');
-  const [ingredientsList, setIngredientsList] = useState([]);;
+  const [ingredientsList, setIngredientsList] = useState(() => {
+    const storedList = sessionStorage.getItem('ingredientsList');
+    return storedList ? JSON.parse(storedList) : [];
+  })
+
+  useEffect(() => {
+    sessionStorage.setItem('ingredientsList', JSON.stringify(ingredientsList));
+  }, [ingredientsList])
   const [userToken, setUserToken] = useState('')
   const [userPantryClicked, setUserPantryClicked] = useState(false)
   useEffect(() => {
@@ -72,22 +79,20 @@ export default function Page() {
   },[pantryItems])
 
   const handleIngredientsListUpdate = async (ingredient) => {
-    let currentList = JSON.parse(sessionStorage.getItem('ingredientsList')) || [];
-
- 
-  const index = currentList.findIndex(item => item.id === ingredient.id);
-
-  if (index === -1) {
+    const index = ingredientsList.findIndex(item => item.name === ingredient.name);
+  
     
-    currentList.push(ingredient);
-  } else {
+    let updatedList;
+    if (index === -1) {
+        
+        updatedList = [...ingredientsList, ingredient];
+    } else {
+        
+        updatedList = ingredientsList.filter((_, i) => i !== index);
+    }
+  
     
-    currentList.splice(index, 1);
-  }
-  sessionStorage.setItem('ingredientsList', JSON.stringify(currentList));
-
-
-  setIngredientsList(currentList);
+    setIngredientsList(updatedList)
   
     if (userToken) {
       try {
@@ -113,9 +118,7 @@ export default function Page() {
         
         console.error('Error updating ingredients:', error);
       }
-    } else {    
-      console.log("Updated ingredientsList:", currentList) 
-    }
+    } 
   }
 
  
@@ -159,13 +162,13 @@ export default function Page() {
         <IngredientCard
             ingredientList={data}
             updateIngredientsList={handleIngredientsListUpdate}
-            checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id)  : ingredientsList.some(item => item.id === ingredient.id)}
+            checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.name === ingredient.name)  : ingredientsList.some(item => item.name === ingredient.name)}
           />}
             {userPantryClicked ? (
           <IngredientCard
             ingredientList={userToken ? pantryItems : ingredientsList}
             updateIngredientsList={handleIngredientsListUpdate}
-            checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.id === ingredient.id) : ingredientsList.some(item => item.id === ingredient.id)}
+            checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.name === ingredient.name) : ingredientsList.some(item => item.name === ingredient.name)}
           />
         ) : (
         Object.keys(aisleDict).map((aisle) => (
@@ -189,7 +192,7 @@ export default function Page() {
                 <IngredientCard
                   ingredientList={aisleDict[aisle]}
                   updateIngredientsList={handleIngredientsListUpdate}
-                  checkCondition={(ingredient) => ingredientsList.some(item => item.id === ingredient.id)}
+                  checkCondition={(ingredient) => userToken ? pantryItems.some(item => item.name === ingredient.name) : ingredientsList.some(item => item.name === ingredient.name)}
                 />
               </div>
             )}

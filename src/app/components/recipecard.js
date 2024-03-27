@@ -2,17 +2,19 @@ import Image from 'next/image'
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function RecipeCard({name , image , link , time , missingIngredients, id, missedIngredientCount }) {
+export default function RecipeCard({name , image , link , time , missingIngredients, id, missedIngredientCount, usedIngredients}) {
 
     const router = useRouter()
     
     
 
     const toSlug = () => {
-        console.log(missingIngredients)
-        localStorage.setItem('missingIngredients', JSON.stringify(missingIngredients))
-        router.push(`/${name}/${id}`)
-      }
+        console.log(missingIngredients);
+        localStorage.setItem('missingIngredients', JSON.stringify(missingIngredients));
+        localStorage.setItem('usedIngredients', JSON.stringify(usedIngredients));
+        const formattedName = name.toLowerCase().replace(/ /g, '-');
+        router.push(`/${formattedName}/${id}`);
+    }
 
     const handleMissingIngredients = () => {
         if(missedIngredientCount == 0){

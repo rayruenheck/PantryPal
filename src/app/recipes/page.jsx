@@ -7,10 +7,8 @@ import Link from 'next/link';
 export default function Page() {
     const apiKey = process.env.NEXT_PUBLIC_SECRET_API_KEY
     const [selectedTime, setSelectedTime] = useState(200)
-    const [recipe, setRecipe] = useState([])
     const [pantryItems, setPantryItems] = useState([])
     const [ingredientsList, setIngredientsList] = useState([]);
-    const [recipesDetails, setRecipesDetails] = useState([])
     const [recipeArray, setRecipeArray]= useState([])
     const [userToken, setUserToken] = useState('')
 
@@ -70,7 +68,7 @@ export default function Page() {
   
     useEffect(() => {
       if (ingredientsList.length > 0) {
-        fetch(`https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredientsListToString(ingredientsList)}&addRecipeInformation=true&fillIngredients=true&maxReadyTime=${selectedTime}&sort=min-missing-ingredients&apiKey=${apiKey}`)
+        fetch(`https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredientsListToString(ingredientsList)}&number=50&addRecipeInformation=true&fillIngredients=true&maxReadyTime=${selectedTime}&sort=min-missing-ingredients&apiKey=${apiKey}`)
         .then(response => response.json())
         .then(data => {
           const tempRecipeArray = data.results.map(item => {
@@ -104,19 +102,6 @@ export default function Page() {
   
     return (
       <div className='h-screen w-full bg-gray-100'>
-          {/* <div className="search-container mx-auto max-w-3xl p-4">
-            <div className="search-box flex items-center border-2 rounded-md border-gray-400 mb-8 bg-white">
-              <input
-                value={recipe}
-                onChange={(e) => setRecipe(e.target.value)}
-                className='flex-1 py-2 px-4 md:h-[75px] rounded-md border-none bg-transparent placeholder-gray-400 focus:outline-none'
-                type='text'
-                name='recipe' 
-                placeholder='Search for recipes'
-                required
-              />
-            </div>            
-          </div> */}
           <div className="time-filters mx-auto max-w-3xl p-5 flex justify-around mb-4">
           {[9, 29, 59].map((time) => (
             <button
@@ -132,15 +117,17 @@ export default function Page() {
         </div>
     
           <div className='flex flex-wrap m-4 sm:m-8 lg:m-12 xl:m-16'>
-            {recipeArray.map((recipe) => (
+            {recipeArray.length > 0 ? recipeArray.map((recipe) => (
               <div
                 key={recipe.title}
                 className='w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-2 sm:p-4 hover:shadow-lg transition duration-300 rounded-md' // Add rounded-md class for rounded corners
                 style={{ marginBottom: '20px' }} // Add margin bottom for spacing
               >
-                <RecipeCard name={recipe.title}  image={recipe.image}  link={recipe.link}  time={recipe.time}  missingIngredients={recipe.missingIngredients} missedIngredientCount={recipe.missedIngredientCount} id={recipe.id} />
+                <RecipeCard name={recipe.title}  image={recipe.image}  link={recipe.link}  time={recipe.time}  missingIngredients={recipe.missingIngredients} missedIngredientCount={recipe.missedIngredientCount} id={recipe.id} usedIngredients={recipe.usedIngredients} />
               </div>
-            ))}
+            )) :
+            <p>Your Pantry is Empty Select Some Ingredients to Begin</p>
+            }
           </div>
           <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md">
           <div className='w-full flex justify-around items-center py-4'>
