@@ -8,7 +8,7 @@ import Image from 'next/image';
 export default function Page() {
   const apiKey = process.env.NEXT_PUBLIC_SECRET_API_KEY;
   const [data , setData] = useState([])
-  const [openDropdown, setOpenDropdown] = useState(null);;
+  const [openDropdown, setOpenDropdown] = useState(aisleDict["Most Common"] ? "Most Common" : null)
   const [pantryItems, setPantryItems] = useState([]);
   const [ingredient, setIngredient] = useState('');
   const [ingredientsList, setIngredientsList] = useState(() => {
