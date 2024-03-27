@@ -12,6 +12,9 @@ export default function Page() {
   const [pantryItems, setPantryItems] = useState([]);
   const [ingredient, setIngredient] = useState('');
   const [ingredientsList, setIngredientsList] = useState(() => {
+    if (typeof window === 'undefined') {
+      return []; 
+  }
     const storedList = sessionStorage.getItem('ingredientsList');
     return storedList ? JSON.parse(storedList) : [];
   })

@@ -19,11 +19,17 @@ export default function Page() {
     const [userToken, setUserToken] = useState('')
     const [pantryItems, setPantryItems] = useState([])
     const [ingredientsList, setIngredientsList] = useState(() => {
+      if (typeof window === 'undefined') {
+        return []
+    }
       const storedList = sessionStorage.getItem('ingredientsList');
       return storedList ? JSON.parse(storedList) : [];
     })
 
     useEffect(() => {
+      if (typeof window === 'undefined') {
+        return []
+    }
       sessionStorage.setItem('ingredientsList', JSON.stringify(ingredientsList));
     }, [ingredientsList])
 
@@ -49,6 +55,7 @@ export default function Page() {
 
 
     useEffect(() => {
+      
       const token = localStorage.getItem('usertoken') || '';
       setUserToken(token);
     }, [])

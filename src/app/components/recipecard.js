@@ -9,7 +9,9 @@ export default function RecipeCard({name , image , link , time , missingIngredie
     
 
     const toSlug = () => {
-        console.log(missingIngredients);
+        if (typeof window === 'undefined') {
+            return []; 
+        }
         localStorage.setItem('missingIngredients', JSON.stringify(missingIngredients));
         localStorage.setItem('usedIngredients', JSON.stringify(usedIngredients));
         const formattedName = name.toLowerCase().replace(/ /g, '-');
