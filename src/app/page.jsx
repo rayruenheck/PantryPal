@@ -54,7 +54,7 @@ export default function Home() {
               Recipes
             </a>
           </Link>
-          <Link legacyBehavior href="/account">
+          <Link legacyBehavior href="/">
             <a className="flex flex-col items-center text-gray-700 font-medium">
               {/* SVG for Account */}
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
