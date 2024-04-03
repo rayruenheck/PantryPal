@@ -1,13 +1,11 @@
+
 'use client'
 import Link from "next/link"
 
 
-
 export default function Home() {
-
-
   return (
-    
+
     <div className="flex flex-col h-screen">
       <div className="flex-grow flex flex-col justify-center px-6 py-10">
         <h1 className="text-6xl font-bold text-green-600 text-center pb-18">Welcome to <br/>Pantry Pal</h1>
@@ -75,3 +73,5 @@ export default function Home() {
     </div>
   )
 }
+  
+
