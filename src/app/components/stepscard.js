@@ -30,12 +30,15 @@ export default function StepsCard( {step}) {
     }
 
   return (
-    <div>
+    <div className='mb-4'>
     
-    <div>step: {step.number}</div>
-    <div> {step.step} </div>
-    <div>{ingredientsUsedString()}</div>
-    <div>{handleTime()}</div>
+    <h3 className="font-dm font-bold text-lg leading-[23.44px]" style={{ fontFamily: '"DM Sans", sans-serif', letterSpacing: '-1%' }}>
+        Step: {step.number}
+    </h3>
+    <div className="font-dm font-medium text-base leading-[20.83px]" style={{ fontFamily: '"DM Sans", sans-serif', fontSize: '16px', letterSpacing: '-1%' }}>
+        {step.step}
+    </div>
+    
     </div>
     
 
