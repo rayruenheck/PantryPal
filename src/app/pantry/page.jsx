@@ -20,10 +20,10 @@ export default function Page() {
 
         {/* Container for the image and random food fact taking up 2/3 of the space on large screens */}
         <div className="hidden lg:flex lg:w-2/3 flex-col items-center justify-center">
-          <Image src="/cup.png" alt="Cup" width={200} height={200} />
+          <Image src="/Cup.png" alt="Cup" width={200} height={200} />
           <p className="text-center mt-4">
             {/* Your random food fact here */}
-            A random food fact.
+            A random food facts
           </p>
         </div>
       </div>
