@@ -1,13 +1,11 @@
+
 'use client'
 import Link from "next/link"
 
 
-
 export default function Home() {
-
-
   return (
-    
+
     <div className="flex flex-col h-screen">
       <div className="flex-grow flex flex-col justify-center px-6 py-10">
         <h1 className="text-6xl font-bold text-green-600 text-center pb-18">Welcome to <br/>Pantry Pal</h1>
@@ -59,7 +57,7 @@ export default function Home() {
               Recipes
             </a>
           </Link>
-          <Link legacyBehavior href="/account">
+          <Link legacyBehavior href="/">
             <a className="flex flex-col items-center text-gray-700 font-medium">
               {/* SVG for Account */}
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,3 +73,5 @@ export default function Home() {
     </div>
   )
 }
+  
+
