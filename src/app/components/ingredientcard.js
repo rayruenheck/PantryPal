@@ -20,7 +20,7 @@ export default function IngredientCard({ ingredientList, updateIngredientsList, 
     return (
       <>
         {!IngredientClicked ? (
-          <div className="p-4 flex flex-row flex-wrap gap-4">
+          <div className="flex flex-row flex-wrap gap-4">
             {combinedIngredientsList.map((ingredient) => (
               <div 
                 key={ingredient.id} 

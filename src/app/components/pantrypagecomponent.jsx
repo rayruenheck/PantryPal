@@ -125,32 +125,22 @@ export default function PantryPageComponent() {
   
    
     
-    const handleLogout = async () => {
-      localStorage.removeItem('accessToken'); 
-      localStorage.removeItem('usertoken');
-      localStorage.removeItem('email');
-  
-      alert('You have been logged out successfully')
-    };
+    
     
   
   
    
   
     return (  
-        <div className='bg-white px-8 py-10 md:pl-[105px] pb-[60px] h-screen overflow-y-auto'>
+        <div className='bg-white px-8 py-10 md:pl-[137px] pb-[60px] h-screen overflow-y-auto'>
          
-          {userToken && (
-            <button className="absolute top-4 right-4 bg-blue-500 text-white py-1 px-4 rounded-full" onClick={handleLogout}>Logout</button>
-          )}
-  
           
           <h1 className="text-4xl font-bold mb-8 text-center">Add ingredients to your pantry</h1>
   
          
           <div className="flex items-center justify-between mb-8">
-            <h2 onClick={() => setUserPantryClicked(false)} className="text-xl font-semibold">Add ingredients</h2>
-            <h2 onClick={() => { fetchPantryItems(); setUserPantryClicked(true); }} className="text-xl font-semibold text-blue-500 cursor-pointer">In your pantry</h2>
+            <h2 onClick={() => setUserPantryClicked(false)} className={`${!userPantryClicked ? 'text-[#558918] underline' : 'text-gray-800'}text-xl font-semibold cursor-pointer`}>Add ingredients</h2>
+            <h2 onClick={() => { fetchPantryItems(); setUserPantryClicked(true); }} className={`${userPantryClicked ? 'text-[#558918] underline' : 'text-gray-800'}text-xl font-semibold cursor-pointer`}>In your pantry</h2>
           </div>
   
           
@@ -186,9 +176,9 @@ export default function PantryPageComponent() {
             />
           ) : (
             Object.keys(aisleDict).map((aisle) => (
-              <div key={aisle} className="mb-8">
+              <div key={aisle} className="mb-3">
                 <button
-                  className="w-full text-left text-xl font-medium bg-white py-3 px-6 rounded-lg flex justify-between items-center"
+                  className="w-full text-left text-xl font-medium bg-white py-1 px-1 mb-6 rounded-lg flex justify-between items-center"
                   onClick={() => setOpenDropdown(openDropdown === aisle ? null : aisle)}
                 >
                   {aisle}
@@ -198,10 +188,14 @@ export default function PantryPageComponent() {
                 src="/dropdown.png" 
                 alt="Dropdown icon" 
                 className="w-6 h-6" 
+                style={{
+                  transform: openDropdown === aisle ? 'rotate(180deg)' : 'none',
+                  transition: 'transform 0.3s ease-in-out'
+                }}
                 />
                 </button>
                 {openDropdown === aisle && (
-                  <div className="mt-4 bg-white py-4 px-6">
+                  <div className="mt-4 mb-10 bg-white ">
                     <IngredientCard
                       ingredientList={aisleDict[aisle]}
                       updateIngredientsList={handleIngredientsListUpdate}
@@ -215,9 +209,9 @@ export default function PantryPageComponent() {
           )}
   
           
-          <div className='fixed bottom-14 left-0 right-0 px-8 md:px-0 md:static'>
+          <div className='fixed w-full bottom-14 left-0 right-0 bg-white  flex justify-center items-center  md:px-0 md:static'>
             <Link legacyBehavior href='/recipes'>
-              <button className="w-full bg-[#67A320] text-white py-3 px-6 rounded-lg text-xl font-bold">
+              <button className="w-5/6 bg-[#67A320]  text-white py-3 px-6 mb-6 mt-6 rounded-lg text-xl font-bold">
                 Get Recipes
               </button>
             </Link>

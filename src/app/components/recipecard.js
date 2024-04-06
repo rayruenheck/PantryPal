@@ -57,7 +57,7 @@ export default function RecipeCard({name , image , link , time , missingIngredie
     </div>
     <div className='p-4 z-1 relative'> 
         <h2 className='text-lg font-semibold mb-1'>{name}</h2>
-        <p className='text-sm text-gray-700'>{handleMissingIngredients()}</p>
+        <p className={`text-sm ${missedIngredientCount == 0 ? 'text-[#558918]' : 'text-[#EA4600]'}`}>{handleMissingIngredients()}</p>
         <div className='mt-2 text-sm'>{handleTime()}</div>
     </div>
 </div>

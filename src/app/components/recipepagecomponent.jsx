@@ -104,7 +104,7 @@ export default function RecipePageComponent() {
           <button
           onClick={() => { handleTimeFilter(time); }}
           key={time}
-          className={`py-2 px-4 rounded-lg ${selectedTime === time ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border'} ${time !== 9 ? 'ml-4' : ''}`}
+          className={`py-2 px-4 rounded-lg ${selectedTime === time ? 'bg-[#D7F1C7] text-black' : 'bg-white text-gray-700 border'} ${time !== 9 ? 'ml-4' : ''}`}
         >
           {time === 9 ? '< 10 Minutes' : time === 29 ? '< 30 Minutes' : '< 1 hour'}
         </button>

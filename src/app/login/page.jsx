@@ -31,7 +31,8 @@ export default function Page() {
 
         localStorage.setItem('accessToken', data.access_token); 
         localStorage.setItem('usertoken', data.usertoken); 
-        localStorage.setItem('email', data.email); 
+        localStorage.setItem('email', data.email);
+        localStorage.setItem('first_name', data.first_name) 
 
 
         alert(`Logged in successfully as ${data.email}`);
