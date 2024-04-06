@@ -217,7 +217,7 @@ export default function PantryPageComponent() {
           
           <div className='fixed bottom-14 left-0 right-0 px-8 md:px-0 md:static'>
             <Link legacyBehavior href='/recipes'>
-              <button className="w-full bg-green-500 text-white py-3 px-6 rounded-lg text-xl font-bold">
+              <button className="w-full bg-[#67A320] text-white py-3 px-6 rounded-lg text-xl font-bold">
                 Get Recipes
               </button>
             </Link>
